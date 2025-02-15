@@ -1,7 +1,10 @@
-import React from "react"
+import Login from "@/components/layout/Login"
+import { getUser } from "@/lib/serverUtils"
 
-const page = () => {
-  return <div>page</div>
+const page = async () => {
+  const user = await getUser(false)
+
+  return <Login user={user} />
 }
 
 export default page

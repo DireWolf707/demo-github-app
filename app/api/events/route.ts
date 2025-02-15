@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server"
-import { githubApp } from "@/lib/githubClient"
+import { githubApp } from "@/lib/github/client"
 
 export const GET = async () => {
   return NextResponse.json({ message: "Hello World" }, { status: 200 })
