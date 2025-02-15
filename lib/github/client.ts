@@ -1,4 +1,7 @@
+import { db } from "@/drizzle/client"
+import { userTable } from "@/drizzle/schema"
 import { App as GithubApp } from "@octokit/app"
+import { eq } from "drizzle-orm"
 
 if (
   !process.env.GITHUB_APP_ID ||
@@ -9,34 +12,41 @@ if (
 )
   throw new Error("Environment variables not set")
 
-const githubApp = new GithubApp({
+const github = new GithubApp({
   appId: process.env.GITHUB_APP_ID,
   privateKey: process.env.GITHUB_PRIVATE_KEY,
   webhooks: {
     secret: process.env.GITHUB_WEBHOOK_SECRET,
   },
-  oauth: {
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  },
 })
 
-githubApp.webhooks.on("ping", () => {
+github.webhooks.on("ping", () => {
   console.log("I am pinged!")
 })
 
-githubApp.webhooks.on("installation.created", ({ payload }) => {
-  console.log(payload)
+github.webhooks.on("installation.created", async ({ payload }) => {
+  const githubInstallationId = payload.installation.id
+  const username = payload.sender.login
+
+  await db
+    .update(userTable)
+    .set({ githubInstallationId })
+    .where(eq(userTable.username, username))
 })
 
-githubApp.webhooks.on("installation.deleted", ({ payload }) => {
-  const installationId = payload.installation.id
+github.webhooks.on("installation.deleted", async ({ payload }) => {
+  const username = payload.sender.login
+
+  await db
+    .update(userTable)
+    .set({ githubInstallationId: null })
+    .where(eq(userTable.username, username))
 })
 
-githubApp.webhooks.onError((err) => {
+github.webhooks.onError((err) => {
   if (err.name === "AggregateError")
     console.error(`Error processing request: ${err.event}`)
   else console.error(err)
 })
 
-export { githubApp }
+export { github }

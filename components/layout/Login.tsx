@@ -14,7 +14,7 @@ const Login = ({ user }: { user?: User }) => {
   return (
     <div>
       <div className="text-center">
-        <div>Logged in as user: {user.name}</div>
+        <div>Logged in as user: {user.username}</div>
         <button
           className="border-2 p-2 rounded"
           onClick={() => signOut({ redirectTo: "/" })}
