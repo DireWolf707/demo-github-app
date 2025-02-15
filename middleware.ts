@@ -3,11 +3,17 @@ import { NextResponse } from "next/server"
 
 const PUBLIC_ROUTES = ["/"]
 const AUTH_API_PREFIX = "/api/auth"
+const WEEBHOOK_API = "/api/webhook"
 
 export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
-  if (nextUrl.pathname.startsWith(AUTH_API_PREFIX)) return NextResponse.next()
+
+  if (
+    nextUrl.pathname === WEEBHOOK_API ||
+    nextUrl.pathname.startsWith(AUTH_API_PREFIX)
+  )
+    return NextResponse.next()
 
   if (!isLoggedIn && !PUBLIC_ROUTES.includes(nextUrl.pathname))
     return NextResponse.redirect(

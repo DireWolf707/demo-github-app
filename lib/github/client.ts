@@ -25,6 +25,14 @@ githubApp.webhooks.on("ping", () => {
   console.log("I am pinged!")
 })
 
+githubApp.webhooks.on("installation.created", ({ payload }) => {
+  console.log(payload)
+})
+
+githubApp.webhooks.on("installation.deleted", ({ payload }) => {
+  const installationId = payload.installation.id
+})
+
 githubApp.webhooks.onError((err) => {
   if (err.name === "AggregateError")
     console.error(`Error processing request: ${err.event}`)

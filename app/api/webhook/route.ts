@@ -1,10 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 import { githubApp } from "@/lib/github/client"
 
-export const GET = async () => {
-  return NextResponse.json({ message: "Hello World" }, { status: 200 })
-}
-
 export const POST = async (req: NextRequest) => {
   try {
     await githubApp.webhooks.verifyAndReceive({
