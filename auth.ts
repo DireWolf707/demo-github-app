@@ -4,15 +4,16 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "./drizzle/client"
 import { userTable, accountTable } from "./drizzle/schema"
 
+type CustomUserProps = {
+  username: string
+}
+
 declare module "next-auth" {
-  interface User {
-    username?: string
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface User extends Partial<CustomUserProps> {}
 
   interface Session {
-    user: {
-      username: string
-    } & DefaultSession["user"]
+    user: CustomUserProps & DefaultSession["user"]
   }
 }
 
