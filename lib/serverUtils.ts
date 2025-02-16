@@ -9,13 +9,8 @@ export const getUser = async (required: boolean = true) => {
   else return null
 }
 
-export const getInstallationId = (
-  user: userT | null,
-  searchParamInstallationId?: string
-) => {
+export const getInstallationId = (user: userT | null) => {
   if (user?.githubInstallationId) return user.githubInstallationId
-
-  if (searchParamInstallationId) return parseInt(searchParamInstallationId)
 
   return null
 }

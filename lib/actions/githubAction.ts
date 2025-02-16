@@ -4,12 +4,9 @@ import { getInstallationId } from "../serverUtils"
 import { repoT } from "../types"
 import { getUserAction } from "./userAction"
 
-export const getUserReposAction = async (
-  searchParamInstallationId?: string
-) => {
+export const getUserReposAction = async () => {
   const user = await getUserAction()
-  const installationId = getInstallationId(user, searchParamInstallationId)
-  console.log(installationId)
+  const installationId = getInstallationId(user)
 
   if (!installationId) return null
 
