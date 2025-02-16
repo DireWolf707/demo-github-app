@@ -1,6 +1,6 @@
 import { db } from "@/drizzle/client"
 import { userTable } from "@/drizzle/schema"
-import { App as GithubApp } from "@octokit/app"
+import { App as GithubApp } from "octokit"
 import { eq } from "drizzle-orm"
 
 if (
