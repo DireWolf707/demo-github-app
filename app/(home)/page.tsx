@@ -3,7 +3,7 @@ import SignOutButton from "@/components/auth/SignOutButton"
 import RepoList from "@/components/repo/RepoList"
 import { getUser } from "@/lib/serverUtils"
 
-const page = async () => {
+const Home = async () => {
   const user = await getUser(false)
 
   return (
@@ -14,4 +14,4 @@ const page = async () => {
   )
 }
 
-export default page
+export default Home
