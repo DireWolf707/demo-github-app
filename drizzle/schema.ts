@@ -14,7 +14,7 @@ export const userTable = pgTable("user", {
   email: text().notNull().unique(),
   emailVerified: timestamp({ mode: "date" }),
   image: text(),
-  username: text().notNull(),
+  username: text().notNull().unique(), // TODO: change on user username change
   githubInstallationId: integer(),
 })
 
