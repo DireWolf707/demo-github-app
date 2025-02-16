@@ -5,8 +5,11 @@ import RefreshButton from "./RefreshButton"
 import SearchButton from "./SearchButton"
 import { useGetUserRepos } from "@/lib/hooks/githubHook"
 import { repoT } from "@/lib/types"
+import { Button } from "../ui/button"
+import { useRouter } from "next/navigation"
 
 const RepoList = () => {
+  const router = useRouter()
   const { data, isFetching, isError } = useGetUserRepos()
   const [repos, setRepos] = useState<repoT[] | null>(null)
 
@@ -35,6 +38,9 @@ const RepoList = () => {
                 {repo.name}
               </a>
               <div>{repo.private ? "Private" : "Public"}</div>
+              <Button onClick={() => router.push("/deploy/" + repo.name)}>
+                Deploy
+              </Button>
             </div>
           ))}
         </div>

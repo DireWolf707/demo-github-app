@@ -16,3 +16,10 @@ export const getUserAction = async () => {
 
   return result
 }
+
+export const getUserInstallationIdAction = async () => {
+  const user = await getUserAction()
+
+  if (!user?.githubInstallationId) return null
+  return user.githubInstallationId
+}
