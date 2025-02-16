@@ -1,5 +1,4 @@
 "use client"
-import { deploymentFormSchema } from "@/lib/zodSchemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { branchT, createDeploymentT } from "@/lib/types"
@@ -22,19 +21,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { buildDeploymentFormSchema } from "@/lib/zodSchemas"
 
 const DeploymentForm = ({ branches }: { branches: branchT[] }) => {
   const form = useForm<createDeploymentT>({
-    resolver: zodResolver(deploymentFormSchema),
+    resolver: zodResolver(buildDeploymentFormSchema(branches)),
     defaultValues: {
       name: "",
       autoDeploy: false,
-      branch: "",
       envFile: "",
     },
   })
 
-  function onSubmit(values: createDeploymentT) {
+  const onSubmit = (values: createDeploymentT) => {
     console.log(values)
   }
 
@@ -52,7 +51,7 @@ const DeploymentForm = ({ branches }: { branches: branchT[] }) => {
                 <FormLabel>Name</FormLabel>
 
                 <FormControl>
-                  <Input {...field} />
+                  <Input required {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -87,12 +86,13 @@ const DeploymentForm = ({ branches }: { branches: branchT[] }) => {
                 <FormLabel>Branch</FormLabel>
 
                 <Select
+                  required
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Select a branch to deploy" />
                     </SelectTrigger>
                   </FormControl>
 
