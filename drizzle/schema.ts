@@ -5,6 +5,7 @@ import {
   primaryKey,
   integer,
   uuid,
+  boolean,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 
@@ -16,6 +17,17 @@ export const userTable = pgTable("user", {
   image: text(),
   username: text().notNull().unique(), // TODO: change on user username change
   githubInstallationId: integer(),
+})
+
+export const deploymentTable = pgTable("deployment", {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: uuid()
+    .notNull()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  name: text().notNull().unique(),
+  envFile: text().notNull(),
+  branch: text().notNull(),
+  autoDeploy: boolean().notNull(),
 })
 
 export const accountTable = pgTable(

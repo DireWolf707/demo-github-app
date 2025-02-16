@@ -22,8 +22,18 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { buildDeploymentFormSchema } from "@/lib/zodSchemas"
+import { useCreateDeployemnt } from "@/lib/hooks/deploymentHook"
+import { toast } from "sonner"
 
-const DeploymentForm = ({ branches }: { branches: branchT[] }) => {
+const DeploymentForm = ({
+  branches,
+  repoName,
+}: {
+  branches: branchT[]
+  repoName: string
+}) => {
+  const { mutateAsync: createDeployment, isPending } =
+    useCreateDeployemnt(repoName)
   const form = useForm<createDeploymentT>({
     resolver: zodResolver(buildDeploymentFormSchema(branches)),
     defaultValues: {
@@ -33,13 +43,18 @@ const DeploymentForm = ({ branches }: { branches: branchT[] }) => {
     },
   })
 
-  const onSubmit = (values: createDeploymentT) => {
-    console.log(values)
-  }
+  const onSubmit = (data: createDeploymentT) =>
+    toast.promise(createDeployment(data), {
+      loading: "Creating deployment...",
+      success: () => "Deployment created successfully",
+      error: () => "Something went wrong",
+    })
 
   return (
     <div className="w-[480px] m-auto p-4 border-2 rounded-xl">
-      <div className="text-center font-bold text-xl">Deployment</div>
+      <div className="text-center font-bold text-xl">
+        &quot;{repoName}&quot; Deployment
+      </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -126,7 +141,7 @@ const DeploymentForm = ({ branches }: { branches: branchT[] }) => {
             )}
           />
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isPending}>
             Deploy
           </Button>
         </form>

@@ -10,7 +10,7 @@ const Deploy = async ({
   const { repoName } = await params
   const branches = await getRepoBranchesAction(repoName)
 
-  return <DeploymentForm branches={branches} />
+  return <DeploymentForm branches={branches} repoName={repoName} />
 }
 
 export default Deploy
